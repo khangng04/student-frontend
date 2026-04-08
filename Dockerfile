@@ -9,17 +9,18 @@ COPY . .
 RUN npm run build
 
 
-FROM node:20-alpine AS runner
+FROM node:20-alpine AS runner   # ✅ FIX: dùng node 20 (không dùng 18)
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV PORT=3000
-ENV HOSTNAME=0.0.0.0
+ENV NODE_ENV=production        
+ENV PORT=3000                 
+ENV HOSTNAME=0.0.0.0           
 
+# ✅ giữ standalone nhưng copy đúng
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-EXPOSE 3000
+EXPOSE 3000                    
 
-CMD ["node", "server.js"]
+CMD ["node", "server.js"]      # ✅ đúng với standalone
